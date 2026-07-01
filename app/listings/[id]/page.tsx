@@ -1,13 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import {
   MapPin, Maximize2, Home, ChevronLeft, Heart, MessageCircle,
   Phone, Share2, CheckCircle, ChevronRight, Shield, Calendar,
   Layers, Car, Wind, Flame
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 const MOCK_DETAIL = {
   id: '1',
@@ -49,9 +50,118 @@ const checks = [
 
 export default function ListingDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [activeImage, setActiveImage] = useState(0)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [chatLoading, setChatLoading] = useState(false)
   const listing = MOCK_DETAIL
+
+  useEffect(() => {
+    const supabase = createClient()
+    if (!supabase) return
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        setUserId(data.user.id)
+      }
+    })
+  }, [])
+
+  const handleChatStart = async () => {
+    if (chatLoading) return
+    setChatLoading(true)
+    try {
+      const supabase = createClient()
+      if (!supabase) {
+        alert('Supabase가 활성화되지 않았습니다.')
+        return
+      }
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      let landlordId = null
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      const isRealUuid = typeof params.id === 'string' && uuidRegex.test(params.id)
+
+      if (isRealUuid) {
+        const { data: realListing } = await supabase
+          .from('listings')
+          .select('user_id')
+          .eq('id', params.id)
+          .single()
+        
+        if (realListing) {
+          landlordId = realListing.user_id
+        }
+      }
+
+      if (!landlordId) {
+        // Fallback for mock listings
+        const { data: otherProfiles } = await supabase
+          .from('profiles')
+          .select('id')
+          .neq('id', user.id)
+          .limit(1)
+
+        if (otherProfiles && otherProfiles.length > 0) {
+          landlordId = otherProfiles[0].id
+        } else {
+          alert('채팅을 테스트하려면 가입된 다른 계정(집주인 역할)이 최소 한 개 더 필요합니다. 다른 브라우저에서 회원가입을 추가로 진행해 주세요.')
+          return
+        }
+      }
+
+      if (landlordId === user.id) {
+        alert('자신의 매물에는 채팅 문의를 할 수 없습니다.')
+        return
+      }
+
+      // Check existing room
+      const { data: rooms } = await supabase
+        .from('chat_rooms')
+        .select('id, landlord_id, tenant_id')
+        .or(`landlord_id.eq.${user.id},tenant_id.eq.${user.id}`)
+
+      const existingRoom = rooms?.find(r => 
+        (r.landlord_id === landlordId && r.tenant_id === user.id) ||
+        (r.landlord_id === user.id && r.tenant_id === landlordId)
+      )
+
+      if (existingRoom) {
+        router.push(`/chat?room_id=${existingRoom.id}`)
+        return
+      }
+
+      // Create new room
+      const { data: newRoom, error: createError } = await supabase
+        .from('chat_rooms')
+        .insert({
+          listing_id: isRealUuid ? params.id : null,
+          landlord_id: landlordId,
+          tenant_id: user.id,
+          last_message: '채팅방이 개설되었습니다.',
+          last_message_at: new Date().toISOString()
+        })
+        .select('id')
+        .single()
+
+      if (newRoom) {
+        router.push(`/chat?room_id=${newRoom.id}`)
+      } else {
+        console.error('채팅방 생성 에러:', createError)
+        alert('채팅방 개설에 실패했습니다.')
+      }
+    } catch (err) {
+      console.error(err)
+      alert('오류가 발생했습니다.')
+    } finally {
+      setChatLoading(false)
+    }
+  }
 
   const images = [
     'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', // 거실
@@ -238,9 +348,13 @@ export default function ListingDetailPage() {
               </div>
 
               <div className="space-y-3">
-                <button className="btn-primary w-full justify-center">
+                <button 
+                  onClick={handleChatStart}
+                  disabled={chatLoading}
+                  className="btn-primary w-full justify-center disabled:opacity-50"
+                >
                   <MessageCircle size={16} />
-                  채팅으로 문의하기
+                  {chatLoading ? '채팅방 연결 중...' : '채팅으로 문의하기'}
                 </button>
                 <button className="btn-secondary w-full justify-center">
                   <Phone size={16} />
@@ -249,7 +363,7 @@ export default function ListingDetailPage() {
               </div>
 
               <p className="text-xs text-center mt-3" style={{ color: '#ADB5BD' }}>
-                로그인 후 연락처 확인이 가능합니다
+                {userId ? '집주인과 바로 대화해 보세요' : '로그인 후 연락처 확인이 가능합니다'}
               </p>
             </div>
 
