@@ -50,7 +50,7 @@ const reviews = [
 
 const guides = [
   { title: '전세사기 예방 필수 체크', desc: '송금 전 반드시 자가진단해야 할 7가지 안전 장치와 확인서류', tag: '안전 보증', readTime: '5분 분량', image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80' },
-  { title: '등기부등본 3단계 해독법', desc: '어려운 단어 가득한 갑구, 을구 속 근저당권 금액 쉽게 계산하기', tag: '서류 분석', readTime: '4분 분량', image: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=400&q=80' },
+  { title: '등기부등본 3단계 해독법', desc: '어려운 단어 가득한 갑구, 을구 속 근저당권 금액 쉽게 계산하기', tag: '서류 분석', readTime: '4분 분량', image: '/registry_guide.png' },
   { title: '계약 체크리스트 20가지', desc: '배수, 수압부터 관리비 내역까지 꼼꼼히 챙기는 체크북', tag: '계약 실무', readTime: '3분 분량', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80' },
 ]
 
