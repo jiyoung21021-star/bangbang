@@ -290,6 +290,8 @@ export default function HomePage() {
                     setIsCommunityModalOpen(true)
                   } else if (title === '중개수수료 0원') {
                     setIsCommissionModalOpen(true)
+                  } else if (title === '실시간 1:1 채팅') {
+                    router.push('/chat')
                   }
                 }}
                 className="card p-7 group cursor-pointer"
