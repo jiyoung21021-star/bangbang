@@ -77,11 +77,11 @@ export default function HomePage() {
     <div style={{ background: '#FFFDFB', minHeight: '100vh' }} className="flex flex-col">
 
       {/* ══════════════ 1. HERO SECTION ══════════════ */}
-      <section className="relative overflow-hidden py-16 md:py-24 rounded-b-[2.5rem] md:rounded-b-[3.5rem]" style={{ background: 'linear-gradient(135deg, #FF7E40 0%, #FF512F 100%)' }}>
+      <section className="relative overflow-hidden py-16 md:py-24" style={{ background: 'linear-gradient(135deg, #FFF6F1 0%, #FFFFFF 100%)' }}>
         
         {/* Decorative background glow */}
-        <div className="absolute top-[-10%] right-[-10%] w-[380px] h-[380px] rounded-full opacity-35 filter blur-[50px] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[380px] h-[380px] rounded-full opacity-40 filter blur-[50px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #FFE1D5 0%, transparent 70%)' }} />
 
         <div className="container-main relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -90,24 +90,24 @@ export default function HomePage() {
             <div className="lg:col-span-7 text-left flex flex-col items-start">
               
               <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full mb-6 text-xs font-black"
-                style={{ background: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255, 255, 255, 0.3)', color: 'white' }}>
+                style={{ background: '#FFEBE3', border: '1px solid #FFCFC0', color: '#FF6B35' }}>
                 <Sparkles size={12} />
                 복비 0원! 이웃과의 전·월세 직거래
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">
+              <h1 className="text-4xl md:text-5xl font-black text-[#2D2D2D] mb-6 leading-tight tracking-tight">
                 집 구할 때,<br />
-                수수료 없이 <span style={{ color: '#FFEBE5', textDecoration: 'underline', textDecorationStyle: 'wavy', textUnderlineOffset: '6px' }}>안전하게 직거래</span>
+                수수료 없이 <span style={{ color: '#FF6B35' }}>안전하게 직거래</span>
               </h1>
 
-              <p className="text-base md:text-lg mb-8 leading-relaxed text-orange-50/95 font-medium">
+              <p className="text-base md:text-lg mb-8 leading-relaxed text-gray-500">
                 어려운 등기부등본 해독부터 계약서 체크리스트까지 방방이 도와드립니다.<br />
                 원하는 조건의 방을 찾고 집주인과 1:1 실시간 대화로 조율해 보세요.
               </p>
 
               {/* Daangn-style Clean Search Bar */}
               <form onSubmit={handleSearch}
-                className="w-full max-w-xl bg-white rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.1)] border border-white/10 overflow-hidden mb-6 transition-all focus-within:shadow-[0_20px_45px_rgba(0,0,0,0.15)]">
+                className="w-full max-w-xl bg-white rounded-2xl shadow-[0_12px_24px_rgba(255,107,53,0.06)] border border-[#FFE3DA] overflow-hidden mb-6 transition-all focus-within:shadow-[0_16px_32px_rgba(255,107,53,0.12)]">
                 
                 {/* Search Type Selector */}
                 <div className="flex bg-gray-50/50 border-b border-[#FCEFEA]">
@@ -145,10 +145,10 @@ export default function HomePage() {
 
               {/* Popular tags */}
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-bold text-orange-100">인기 키워드:</span>
+                <span className="font-bold text-gray-400">인기 키워드:</span>
                 {['마포구', '성수동', '여의도동', '자양동', '신촌'].map(keyword => (
                   <button key={keyword} onClick={() => setSearchQuery(keyword)}
-                    className="px-3 py-1.5 bg-white/12 hover:bg-white/20 text-white rounded-full border border-white/15 transition-all font-semibold">
+                    className="px-3 py-1.5 bg-white hover:bg-[#FFF5F2] text-gray-600 rounded-full border border-[#FFE6DE]/60 transition-all font-medium">
                     {keyword}
                   </button>
                 ))}
