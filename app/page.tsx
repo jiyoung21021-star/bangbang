@@ -42,11 +42,7 @@ const features = [
   { icon: BookOpen, title: '정보 커뮤니티', desc: '사회초년생을 위한 부동산 A to Z', color: '#6F42C1', bg: 'rgba(111,66,193,0.1)' },
 ]
 
-const reviews = [
-  { name: '김*현', role: '취업 1년차', text: '중개수수료 130만원 절약했어요! 집주인분도 친절하시고 직거래라 계약도 간단했습니다 😊', rating: 5 },
-  { name: '이*은', role: '대학원생', text: '전세사기 걱정됐는데 가이드 보고 안심하고 계약했어요. 체크리스트 너무 유용해요!', rating: 5 },
-  { name: '박*준', role: '사회초년생', text: '앱이 직관적이고 매물도 많아요. 일주일만에 원하는 집 찾았습니다 👍', rating: 5 },
-]
+
 
 const guides = [
   { title: '전세사기 예방 필수 체크', desc: '송금 전 반드시 자가진단해야 할 7가지 안전 장치와 확인서류', tag: '안전 보증', readTime: '5분 분량', image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80' },
@@ -456,40 +452,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════ REVIEWS ══════════════ */}
-      <section className="py-24" style={{ background: '#F8F9FA' }}>
-        <div className="container-main">
-          <div className="text-center mb-14">
-            <p className="text-sm font-bold mb-2 uppercase tracking-widest" style={{ color: '#FF6B35' }}>Real Reviews</p>
-            <h2 className="section-title">실제 이용자 후기</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {reviews.map((r, i) => (
-              <div key={i} className="card p-7">
-                {/* Stars */}
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: r.rating }).map((_, j) => (
-                    <Star key={j} size={14} fill="#FF6B35" style={{ color: '#FF6B35' }} />
-                  ))}
-                </div>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: '#1A1A2E' }}>
-                  &ldquo;{r.text}&rdquo;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm"
-                    style={{ background: 'linear-gradient(135deg, #FF6B35, #E85A24)', color: 'white' }}>
-                    {r.name[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold" style={{ color: '#1A1A2E' }}>{r.name}</p>
-                    <p className="text-xs" style={{ color: '#ADB5BD' }}>{r.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* ══════════════ SAFETY DIRECT DEAL MODAL ══════════════ */}
       {isSafetyModalOpen && (
